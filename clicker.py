@@ -160,23 +160,18 @@ class clicker:
             self.session.headers['content-length'] = str(len(json.dumps(data)))
             r = self.session.get('https://clicker-api.joincommunity.xyz/clicker/task/combine-completed', json=data)
             for current_buff in r.json()['data']:
-                match current_buff['taskId']:
-                    case 2:
-                        # Full Energy!
-                        max_full_energy_times: int = current_buff['task']['max']
-                        if current_buff['task']['status'] == 'active':
-                                full_energy_times_count += 1
-                    
-                    case 3:
-                        max_turbo_times: int = current_buff['task']['max']
-
-                        if current_buff['task']['status'] == 'active':
-                            turbo_times_count += 1
+                if current_buff['taskId'] == 2:
+                    max_full_energy_times: int = current_buff['task']['max']
+                    if current_buff['task']['status'] == 'active':
+                        full_energy_times_count += 1
+                elif current_buff['taskId'] == 3:
+                    max_turbo_times: int = current_buff['task']['max']
+                    if current_buff['task']['status'] == 'active':
+                        turbo_times_count += 1
             return max_turbo_times >= turbo_times_count, max_full_energy_times >= full_energy_times_count
         except Exception as e:
             print(e)
             return False, False
-    
     def genrateHash(self, _hash):
         def _run_js(string):
             if string == "document.querySelectorAll('body').length":
